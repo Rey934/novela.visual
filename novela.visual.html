@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Novela Visual Fantasía</title>
+
+<style>
+
+body{
+    margin:0;
+    overflow:hidden;
+    font-family:Arial;
+}
+
+#game{
+    position:relative;
+    width:100vw;
+    height:100vh;
+}
+
+/* Fondo */
+#background{
+    position:absolute;
+    width:100%;
+    height:100%;
+    object-fit:cover;
+}
+
+/* Personajes */
+.character{
+    position:absolute;
+    bottom:0;
+    height:80%;
+}
+
+#hero{
+    left:5%;
+}
+
+#girl{
+    right:5%;
+}
+
+/* Caja de diálogo */
+#textbox{
+    position:absolute;
+    bottom:0;
+    width:100%;
+    background:rgba(0,0,0,0.7);
+    color:white;
+    padding:20px;
+    box-sizing:border-box;
+}
+
+#name{
+    font-size:28px;
+    color:gold;
+    font-weight:bold;
+}
+
+#text{
+    margin-top:10px;
+    font-size:22px;
+}
+
+/* Botón siguiente */
+#nextBtn{
+    margin-top:15px;
+    padding:10px 20px;
+    font-size:18px;
+    background:purple;
+    color:white;
+    border:none;
+    border-radius:10px;
+    cursor:pointer;
+}
+
+/* Opciones en el centro */
+#choices{
+    position:absolute;
+    top:50%;
+    left:50%;
+    transform:translate(-50%, -50%);
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:15px;
+}
+
+/* Botones de respuesta */
+.choiceBtn{
+    width:320px;
+    padding:15px;
+    font-size:20px;
+    background:darkblue;
+    color:white;
+    border:none;
+    border-radius:15px;
+    cursor:pointer;
+    transition:0.3s;
+}
+
+.choiceBtn:hover{
+    background:purple;
+    transform:scale(1.05);
+}
+
+</style>
+</head>
+
+<body>
+
+<div id="game">
+
+<!-- Fondo -->
+    <img id="background" src="https://images.unsplash.com/photo-1511497584788-876760111969?q=80&w=1920&auto=format&fit=crop" alt="fondo">
+
+<!-- Personajes -->
+<img id="hero" class="character" src="chico-removebg-preview.png">
+
+<img id="girl" class="character" src="chica-removebg-preview.png">
+
+<!-- Caja de diálogo -->
+<div id="textbox">
+
+<div id="name">Narrador</div>
+
+<div id="text">
+En un bosque mágico, un joven aventurero encontró a una misteriosa hechicera.
+</div>
+
+<button id="nextBtn">Siguiente</button>
+
+</div>
+
+<!-- Opciones -->
+<div id="choices"></div>
+
+</div>
+
+<script>
+
+const scenes = [
+
+{
+    name:"Hechicera",
+    text:"El reino está en peligro... ¿Me ayudarás?"
+},
+
+{
+    name:"Jugador",
+    text:"Debo decidir qué hacer...",
+    choice:true
+
+}
+
+];
+
+let index = 0;
+
+const nameBox = document.getElementById("name");
+const textBox = document.getElementById("text");
+const nextBtn = document.getElementById("nextBtn");
+const choices = document.getElementById("choices");
+
+nextBtn.addEventListener("click", nextScene);
+
+function nextScene(){
+
+    index++;
+
+    if(index >= scenes.length){
+        return;
+    }
+
+    let scene = scenes[index];
+
+    nameBox.innerText = scene.name;
+    textBox.innerText = scene.text;
+
+    choices.innerHTML = "";
+
+    if(scene.choice){
+
+        nextBtn.style.display = "none";
+
+        /* Opción 1 */
+        const btn1 = document.createElement("button");
+
+        btn1.innerText = "Sí, salvaré el reino";
+
+        btn1.className = "choiceBtn";
+
+        btn1.onclick = function(){
+
+            goodEnding();
+
+        };
+
+        /* Opción 2 */
+        const btn2 = document.createElement("button");
+
+        btn2.innerText = "No, quiero irme";
+
+        btn2.className = "choiceBtn";
+
+        btn2.onclick = function(){
+
+            badEnding();
+
+        };
+
+        choices.appendChild(btn1);
+        choices.appendChild(btn2);
+
+    }
+
+}
+
+/* Final bueno */
+function goodEnding(){
+
+    choices.innerHTML = "";
+
+    nameBox.innerText = "Narrador";
+
+    textBox.innerText =
+    "El héroe y la hechicera derrotaron al rey oscuro y salvaron el reino. FINAL BUENO.";
+
+}
+
+/* Final malo */
+function badEnding(){
+
+    choices.innerHTML = "";
+
+    nameBox.innerText = "Narrador";
+
+    textBox.innerText =
+    "El héroe abandonó el reino. La oscuridad consumió el mundo. FINAL MALO.";
+
+}
+
+</script>
+
+</body>
+</html>
